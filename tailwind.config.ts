@@ -22,6 +22,7 @@ const config = {
         primaryDark: "#141518",
         primaryPurple: "#8162FF",
         secondaryDark: "#141518",
+        secondaryBlack: "#1A1B1F",
         gray01: "#26272B",
         gray03: "#838896",
         border: "hsl(var(--border))",
