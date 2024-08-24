@@ -1,13 +1,22 @@
+import Image from "next/image"
+import { SearchIcon } from "lucide-react"
+
+{
+  /*Components */
+}
 import { Header } from "@/components/header"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Carousel } from "@/components/carousel"
 import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { SearchIcon } from "lucide-react"
-import Image from "next/image"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
-export default function Home() {
+import { db } from "@/lib/prisma"
+
+export default async function Home() {
+  const barbershops = await db.barbershop.findMany({})
+
   return (
     <div>
       <Header />
@@ -25,7 +34,7 @@ export default function Home() {
           </Button>
         </div>
 
-        <div className="relative h-[150px] w-full">
+        <div className="relative mt-6 h-[150px] w-full">
           <Image
             src="/banner-01.png"
             alt="banner apresentação das melhores barbearias"
@@ -34,7 +43,11 @@ export default function Home() {
           />
         </div>
 
-        <Card className="mt-6 rounded-[8px] border-none bg-secondaryBlack">
+        {/* agendamentos */}
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+        <Card className="rounded-[8px] border-none bg-secondaryBlack">
           <CardContent className="flex justify-between">
             <div className="flex flex-col gap-2 py-5">
               <Badge className="w-fit bg-primaryPurple/30 text-primaryPurple hover:bg-primaryPurple/30">
@@ -50,13 +63,26 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center border-l-2 border-solid border-gray01 px-5">
+            <div className="flex flex-col items-center justify-center border-l-2 border-solid border-gray01 pl-5">
               <p className="text-sm">Fevereiro</p>
               <p className="text-3xl">06</p>
               <p className="text-sm">09:45</p>
             </div>
           </CardContent>
         </Card>
+
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Recomendados
+        </h2>
+
+        {/* Para esconder o scrollbar, usamos uma div com a classe [&::-webkit-scrollbar]:hidden. */}
+        {/* <div className="flex items-center gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {barbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div> */}
+
+        <Carousel barbershops={barbershops} />
       </div>
     </div>
   )
