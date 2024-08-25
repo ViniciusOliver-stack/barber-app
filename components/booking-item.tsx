@@ -18,7 +18,10 @@ export function BookingItem() {
 
             <div className="flex items-center gap-2">
               <Avatar className="h-6 w-6">
-                <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" />
+                <AvatarImage
+                  src="https://avatars.githubusercontent.com/u/124599?v=4"
+                  className="rounded-full"
+                />
               </Avatar>
               <p className="text-sm">Barbearia FSW</p>
             </div>
