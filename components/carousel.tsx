@@ -1,14 +1,13 @@
 "use client"
+
 import React, { useRef } from "react"
-import { Barbershop } from "@prisma/client"
-import { BarbershopItem } from "./barbershop-item"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-interface CarouselProps {
-  barbershops: Barbershop[]
-}
-
-export function Carousel({ barbershops }: CarouselProps) {
+export function Carousel({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const scroll = (scrollOffset: number) => {
@@ -26,11 +25,9 @@ export function Carousel({ barbershops }: CarouselProps) {
         className="flex items-center gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
         ref={scrollContainerRef}
       >
-        {barbershops.map((barbershop) => (
-          <BarbershopItem key={barbershop.id} barbershop={barbershop} />
-        ))}
+        {children}
       </div>
-      <div className="mt-2 flex gap-3">
+      <div className="mt-2 hidden gap-3 md:flex">
         <button
           className="flex h-8 w-8 items-center justify-center rounded-full border border-gray01 p-2 text-white"
           onClick={() => scroll(-300)}
