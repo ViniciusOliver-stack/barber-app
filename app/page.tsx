@@ -1,12 +1,9 @@
 import Image from "next/image"
-import { SearchIcon } from "lucide-react"
 
 {
   /*Components */
 }
-import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Carousel } from "@/components/carousel"
 import { BookingItem } from "@/components/booking-item"
@@ -14,6 +11,7 @@ import { quickSearchOptions } from "./_constants/search"
 import { BarbershopItem } from "@/components/barbershop-item"
 
 import { db } from "@/lib/prisma"
+import { Search } from "@/components/search"
 
 export default async function Home() {
   const barbershops = await db.barbershop.findMany({})
@@ -31,17 +29,8 @@ export default async function Home() {
         <h2 className="text-xl font-bold">Olá, Vinicius!</h2>
         <p>Segunda-feira, 22 de agosto.</p>
 
-        <div className="mt-6 flex flex-row items-center gap-1.5">
-          <Input
-            placeholder="Buscar"
-            className="border-gray01 placeholder:text-gray-500"
-          />
-          <Button
-            size="icon"
-            className="rounded-[8px] bg-primaryPurple px-3 py-2"
-          >
-            <SearchIcon />
-          </Button>
+        <div className="mt-6">
+          <Search />
         </div>
 
         <Carousel>
@@ -93,8 +82,6 @@ export default async function Home() {
           ))}
         </Carousel>
       </div>
-
-      <Footer />
     </div>
   )
 }
