@@ -7,7 +7,8 @@ interface BarberShopsPageProps {
   //O searchParams é obrigatório esse nome, mas o valor que eu passar dentro do searchParams
   //Será o valor que ele vai procurar na minha URL: http://localhost:3000/barbershops?joao=01 e exibir em tela
   searchParams: {
-    search?: string
+    title?: string
+    service?: string
   }
 }
 
@@ -19,7 +20,28 @@ export default async function BarberShopsPage({
 }: BarberShopsPageProps) {
   const barbershops = await db.barbershop.findMany({
     where: {
-      name: { contains: searchParams.search, mode: "insensitive" },
+      OR: [
+        searchParams.title
+          ? {
+              name: {
+                contains: searchParams.title,
+                mode: "insensitive",
+              },
+            }
+          : {},
+        searchParams.service
+          ? {
+              services: {
+                some: {
+                  name: {
+                    contains: searchParams.service,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            }
+          : {},
+      ],
     },
   })
 
@@ -33,7 +55,8 @@ export default async function BarberShopsPage({
 
       <div className="px-5">
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Resultados para &quot;{searchParams.search}&quot;
+          Resultados para &quot;{searchParams?.title || searchParams?.service}
+          &quot;
         </h2>
 
         <div className="grid grid-cols-2 gap-4">
