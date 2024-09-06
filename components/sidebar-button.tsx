@@ -97,7 +97,7 @@ export function SidebarButton() {
 
         <div className="flex flex-col gap-4 border-b border-solid border-gray01 py-5">
           <SheetClose asChild>
-            <Button className="justify-start gap-2" asChild>
+            <Button className="justify-start gap-2 bg-gray01" asChild>
               <Link href="/">
                 <HomeIcon size={16} />
                 Início
@@ -105,7 +105,7 @@ export function SidebarButton() {
             </Button>
           </SheetClose>
 
-          <Button className="justify-start gap-2">
+          <Button className="justify-start gap-2 bg-gray01">
             <CalendarIcon size={16} />
             Agendamentos
           </Button>
@@ -113,7 +113,7 @@ export function SidebarButton() {
         <div className="flex flex-col gap-4 border-b border-solid border-gray01 py-5">
           {quickSearchOptions.map((option) => (
             <SheetClose key={option.title} asChild>
-              <Button className="justify-start gap-2" asChild>
+              <Button className="justify-start gap-2 bg-gray01" asChild>
                 <Link href={`/barbershops?service=${option.title}`}>
                   <Image
                     src={option.imageUrl}
