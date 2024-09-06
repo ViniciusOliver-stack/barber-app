@@ -48,6 +48,8 @@ const TIME_LIST = [
   "24:00",
 ]
 
+// function getTimeList(bookings: Book)
+
 export function ServiceItem({ service, barbershop }: ServiceItemProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
