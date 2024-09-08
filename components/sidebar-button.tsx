@@ -20,16 +20,13 @@ import { quickSearchOptions } from "@/app/_constants/search"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import Link from "next/link"
 import Image from "next/image"
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog"
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
-import { signIn, signOut, useSession } from "next-auth/react"
+import { Dialog, DialogTrigger } from "./ui/dialog"
+import { signOut, useSession } from "next-auth/react"
+import { SignInDialog } from "./sigin-in-dialog"
 
 export function SidebarButton() {
   const { data } = useSession()
 
-  async function handleLoginWithGoogleClick() {
-    await signIn("google")
-  }
   async function handleLogoutButton() {
     signOut()
   }
@@ -74,22 +71,7 @@ export function SidebarButton() {
                     <LogInIcon size={16} />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="w-[90%] rounded-[10px] border-none bg-gray01">
-                  <DialogHeader>
-                    <DialogTitle>Faça seu login na plataforma</DialogTitle>
-                    <DialogDescription className="text-xs text-gray-400">
-                      Conecte-se usando sua conta do Google e comece a agendar
-                      seus cortes de cabelo de forma fácil e eficiente.
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <Button
-                    className="borde-gray01 rounded-[8px] border font-bold"
-                    onClick={handleLoginWithGoogleClick}
-                  >
-                    Google
-                  </Button>
-                </DialogContent>
+                <SignInDialog />
               </Dialog>
             </>
           )}
@@ -128,15 +110,17 @@ export function SidebarButton() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-4 py-5">
-          <Button
-            className="gap-2 rounded-[8px] bg-primaryPurple hover:bg-primaryPurple/80"
-            onClick={handleLogoutButton}
-          >
-            <LogOutIcon size={16} />
-            Sair da conta
-          </Button>
-        </div>
+        {data?.user && (
+          <div className="flex flex-col gap-4 py-5">
+            <Button
+              className="gap-2 rounded-[8px] bg-primaryPurple hover:bg-primaryPurple/80"
+              onClick={handleLogoutButton}
+            >
+              <LogOutIcon size={16} />
+              Sair da conta
+            </Button>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   )
