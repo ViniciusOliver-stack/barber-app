@@ -15,6 +15,8 @@ import { Search } from "@/components/search"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -45,6 +47,7 @@ export default async function Home() {
         orderBy: {
           date: "asc",
         },
+        take: 3,
       })
     : []
 
@@ -52,8 +55,10 @@ export default async function Home() {
     <div>
       <Header />
       <div className="p-5">
-        <h2 className="text-xl font-bold">Olá, Vinicius!</h2>
-        <p>Segunda-feira, 22 de agosto.</p>
+        <h2 className="text-xl font-bold">Olá, {session?.user?.name}!</h2>
+        <p className="capitalize">
+          {format(new Date(), "EEEE, dd 'de' MMMM.", { locale: ptBR })}
+        </p>
 
         <div className="mt-6">
           <Search />
@@ -97,11 +102,11 @@ export default async function Home() {
               Agendamentos
             </h2>
 
-            <Carousel>
+            <div className="flex flex-wrap items-center gap-4 overflow-x-auto lg:flex-nowrap [&::-webkit-scrollbar]:hidden">
               {confirmedBookings.map((booking) => (
                 <BookingItem key={booking.id} booking={booking} />
               ))}
-            </Carousel>
+            </div>
           </div>
         )}
 
