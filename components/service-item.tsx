@@ -90,7 +90,12 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
     fetch()
   }, [selectedDay, service.id])
 
-  console.log(dayBookings)
+  function handleBookingSheetOpenChange() {
+    setSelectedDay(undefined)
+    setSelectedTime(undefined)
+    setDayBookings([])
+    setBookingSheetIsOpen(false)
+  }
 
   function handleSelectedTime(time: string | undefined) {
     setSelectedTime(time)
@@ -119,6 +124,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
         date: newDate,
       })
 
+      handleBookingSheetOpenChange()
       setBookingSheetIsOpen(false)
 
       toast.success("Reserva feita com sucesso!", {
@@ -138,12 +144,6 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
         },
       })
     }
-  }
-
-  function handleBookingSheetOpenChange() {
-    setSelectedDay(undefined)
-    setSelectedTime(undefined)
-    setDayBookings(undefined)
   }
 
   return (
@@ -181,6 +181,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
               >
                 Reservar
               </Button>
+
               <SheetContent className="border-none bg-neutral-900 px-0">
                 <SheetHeader className="px-5">
                   <SheetTitle>Fazer reserva</SheetTitle>
@@ -191,7 +192,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
                     mode="single"
                     locale={ptBR}
                     onSelect={handleSelectedDay}
-                    fromDate={addDays(new Date(), 1)}
+                    fromDate={addDays(new Date(), 0)}
                     selected={selectedDay}
                     styles={{
                       head_cell: {
