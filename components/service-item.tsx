@@ -11,11 +11,10 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { format, set } from "date-fns"
+import { addDays, format, set } from "date-fns"
 import React, { useEffect, useState } from "react"
 import { Carousel } from "./carousel"
 import { createBooking } from "@/app/_actions/create-booking"
@@ -48,7 +47,24 @@ const TIME_LIST = [
   "24:00",
 ]
 
-// function getTimeList(bookings: Book)
+function getTimeList(bookings: Booking[]) {
+  return TIME_LIST.filter((time) => {
+    const hour = Number(time.split(":")[0])
+    const minute = Number(time.split(":")[1])
+
+    const hasBookingOnCurrentsTime = bookings.some(
+      (booking) =>
+        booking.date.getHours() === hour &&
+        booking.date.getMinutes() === minute,
+    )
+
+    if (hasBookingOnCurrentsTime) {
+      return false
+    }
+
+    return true
+  })
+}
 
 export function ServiceItem({ service, barbershop }: ServiceItemProps) {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
@@ -57,6 +73,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
   )
   const { data } = useSession()
 
+  const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
   const [dayBookings, setDayBookings] = useState<Booking[]>()
 
   useEffect(() => {
@@ -102,6 +119,8 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
         date: newDate,
       })
 
+      setBookingSheetIsOpen(false)
+
       toast.success("Reserva feita com sucesso!", {
         style: {
           borderRadius: "10px",
@@ -119,6 +138,12 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
         },
       })
     }
+  }
+
+  function handleBookingSheetOpenChange() {
+    setSelectedDay(undefined)
+    setSelectedTime(undefined)
+    setDayBookings(undefined)
   }
 
   return (
@@ -146,11 +171,16 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
               }).format(Number(service.price))}
             </p>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="rounded-[10px] bg-gray01">Reservar</Button>
-              </SheetTrigger>
-
+            <Sheet
+              open={bookingSheetIsOpen}
+              onOpenChange={handleBookingSheetOpenChange}
+            >
+              <Button
+                className="rounded-[10px] bg-gray01"
+                onClick={() => setBookingSheetIsOpen(true)}
+              >
+                Reservar
+              </Button>
               <SheetContent className="border-none bg-neutral-900 px-0">
                 <SheetHeader className="px-5">
                   <SheetTitle>Fazer reserva</SheetTitle>
@@ -161,6 +191,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
                     mode="single"
                     locale={ptBR}
                     onSelect={handleSelectedDay}
+                    fromDate={addDays(new Date(), 1)}
                     selected={selectedDay}
                     styles={{
                       head_cell: {
@@ -191,7 +222,7 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
                 {selectedDay && (
                   <div className="border-b border-solid border-gray01 p-5">
                     <Carousel>
-                      {TIME_LIST.map((time) => (
+                      {getTimeList(dayBookings || []).map((time) => (
                         <Button
                           onClick={() => handleSelectedTime(time)}
                           key={time}

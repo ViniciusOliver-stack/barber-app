@@ -36,7 +36,7 @@ export function SidebarButton() {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger className="bg-transparent" asChild>
         <Button size="icon" variant="outline" className="border-none">
           <MenuIcon />
         </Button>

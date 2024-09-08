@@ -6,6 +6,7 @@ Assim podemos chamar o banco de dados que vai ser feita do lado servidor e conse
 (Utilizando o server actions é como se a gente criasse uma rota de API, só que de uma forma mais fácil.)*/
 
 import { db } from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 
 interface CreateBookingProps {
   serviceId: string
@@ -17,4 +18,6 @@ export async function createBooking(params: CreateBookingProps) {
   await db.booking.create({
     data: params,
   })
+
+  revalidatePath("/barbershops/[id]")
 }
