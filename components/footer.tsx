@@ -8,7 +8,7 @@ export function Footer() {
     <footer>
       <Card className="border-none">
         <CardContent className="border-t border-gray01 px-5 py-6">
-          <p className="text-sm">{year} Copyright Vinicius Oliver 💜</p>
+          <p className="text-sm">{year} Copyright Symplus 💜</p>
         </CardContent>
       </Card>
     </footer>
