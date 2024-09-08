@@ -87,10 +87,14 @@ export function SidebarButton() {
             </Button>
           </SheetClose>
 
-          <Button className="justify-start gap-2 bg-gray01">
-            <CalendarIcon size={16} />
-            Agendamentos
-          </Button>
+          <SheetClose asChild>
+            <Button className="justify-start gap-2 bg-gray01" asChild>
+              <Link href="/bookings">
+                <CalendarIcon size={16} />
+                Agendamentos
+              </Link>
+            </Button>
+          </SheetClose>
         </div>
         <div className="flex flex-col gap-4 border-b border-solid border-gray01 py-5">
           {quickSearchOptions.map((option) => (
