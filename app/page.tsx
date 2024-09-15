@@ -90,14 +90,14 @@ export default async function Home() {
           </div>
         </Carousel>
 
-        <div className="relative mt-6 h-[150px] w-full">
+        {/* <div className="relative mt-6 h-[150px] w-full">
           <Image
             src="/banner-01.png"
             alt="banner apresentação das melhores barbearias"
             fill
             className="rounded-xl object-cover"
           />
-        </div>
+        </div> */}
 
         {/* agendamentos */}
         {session?.user && (
@@ -110,7 +110,10 @@ export default async function Home() {
 
             <div className="flex flex-wrap items-center gap-4 overflow-x-auto lg:flex-nowrap [&::-webkit-scrollbar]:hidden">
               {confirmedBookings.map((booking) => (
-                <BookingItem key={booking.id} booking={booking} />
+                <BookingItem
+                  key={booking.id}
+                  booking={JSON.parse(JSON.stringify(booking))}
+                />
               ))}
             </div>
           </div>
