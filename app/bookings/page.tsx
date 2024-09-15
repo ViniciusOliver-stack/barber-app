@@ -58,7 +58,7 @@ export default async function Booking() {
     <div>
       <Header />
 
-      <div className="h-[84vh] space-y-3 p-5">
+      <div className="space-y-3 p-5">
         <h1 className="text-xl font-bold">Agendamentos</h1>
 
         {confirmedBookings.length > 0 ? (
