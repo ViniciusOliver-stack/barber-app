@@ -32,6 +32,7 @@ import {
 import { deleteBooking } from "@/app/_actions/delete-booking"
 import toast from "react-hot-toast"
 import { useState } from "react"
+import { BookingSummary } from "./ui/booking-summary"
 
 interface BookingItemProps {
   //Através do prisma podemos dizer o que se encontra incluso na nossa query do Booking
@@ -150,7 +151,13 @@ export function BookingItem({ booking }: BookingItemProps) {
             </Badge>
           </div>
 
-          <Card>
+          <BookingSummary
+            barbershop={booking.service.barbershop}
+            service={booking.service}
+            selectedDay={booking.date}
+          />
+
+          {/* <Card>
             <CardContent className="space-y-3 p-3">
               <div className="flex items-center justify-between">
                 <h2 className="font-bold">{booking.service.name}</h2>
@@ -187,7 +194,7 @@ export function BookingItem({ booking }: BookingItemProps) {
                 </span>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           <div className="mt-6 flex w-full flex-col gap-4">
             {booking.service.barbershop.phones.map((phone, index) => (
