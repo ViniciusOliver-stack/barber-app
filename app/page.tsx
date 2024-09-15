@@ -102,9 +102,11 @@ export default async function Home() {
         {/* agendamentos */}
         {session?.user && (
           <div>
-            <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-              Agendamentos
-            </h2>
+            {confirmedBookings.length > 0 && (
+              <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+                Agendamentos
+              </h2>
+            )}
 
             <div className="flex flex-wrap items-center gap-4 overflow-x-auto lg:flex-nowrap [&::-webkit-scrollbar]:hidden">
               {confirmedBookings.map((booking) => (
