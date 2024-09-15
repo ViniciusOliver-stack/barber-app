@@ -14,8 +14,8 @@ import {
 } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { addDays, format, set } from "date-fns"
-import React, { useEffect, useState } from "react"
+import { addDays, format, isPast, isToday, set } from "date-fns"
+import React, { useEffect, useMemo, useState } from "react"
 import { Carousel } from "./carousel"
 import { createBooking } from "@/app/_actions/create-booking"
 import toast from "react-hot-toast"
@@ -49,15 +49,26 @@ const TIME_LIST = [
   "24:00",
 ]
 
-function getTimeList(bookings: Booking[]) {
+interface GetTimeListProps {
+  bookings: Booking[]
+  selectedDay: Date
+}
+
+function getTimeList({ bookings, selectedDay }: GetTimeListProps) {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
-    const minute = Number(time.split(":")[1])
+    const minutes = Number(time.split(":")[1])
+
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
+
+    if (timeIsOnThePast && isToday(selectedDay)) {
+      return false
+    }
 
     const hasBookingOnCurrentsTime = bookings.some(
       (booking) =>
         booking.date.getHours() === hour &&
-        booking.date.getMinutes() === minute,
+        booking.date.getMinutes() === minutes,
     )
 
     if (hasBookingOnCurrentsTime) {
@@ -156,6 +167,15 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
     }
   }
 
+  const timeList = useMemo(() => {
+    if (!selectedDay) return []
+
+    return getTimeList({
+      bookings: dayBookings || [],
+      selectedDay,
+    })
+  }, [dayBookings, selectedDay])
+
   return (
     <>
       <Card>
@@ -234,15 +254,21 @@ export function ServiceItem({ service, barbershop }: ServiceItemProps) {
                   {selectedDay && (
                     <div className="border-b border-solid border-gray01 p-5">
                       <Carousel>
-                        {getTimeList(dayBookings || []).map((time) => (
-                          <Button
-                            onClick={() => handleSelectedTime(time)}
-                            key={time}
-                            className={`rounded-full border border-gray01 transition-all duration-150 hover:bg-gray01 ${selectedTime === time ? "bg-primaryPurple" : "bg-transparent"}`}
-                          >
-                            {time}
-                          </Button>
-                        ))}
+                        {timeList.length > 0 ? (
+                          timeList.map((time) => (
+                            <Button
+                              onClick={() => handleSelectedTime(time)}
+                              key={time}
+                              className={`rounded-full border border-gray01 transition-all duration-150 hover:bg-gray01 ${selectedTime === time ? "bg-primaryPurple" : "bg-transparent"}`}
+                            >
+                              {time}
+                            </Button>
+                          ))
+                        ) : (
+                          <p className="text-xs">
+                            Não há horários disponíveis para este dia.
+                          </p>
+                        )}
                       </Carousel>
                     </div>
                   )}
